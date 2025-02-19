@@ -1,40 +1,31 @@
 from google.cloud import storage
-from io import BytesIO
-
 
 storage_client = storage.Client()
 
+def get_list_of_files(bucket_name, prefix='images/'): 
+    """Lists all the blobs in the bucket with the specified prefix."""
+    print("\n")
+    print(f"get_list_of_files: {bucket_name}/{prefix}")  
+    blobs = storage_client.list_blobs(bucket_name, prefix=prefix) 
+    files = []
+    for blob in blobs:
+        files.append(blob.name.replace(prefix, '', 1)) 
+    return files
 
-def upload_file(bucket_name, blob_name, file_object):  
+
+def upload_file(bucket_name, file_name, prefix='images/'): 
     """Uploads a file to the bucket."""
+    print("\n")
+    print(f"upload_file: {bucket_name}/{prefix}{file_name}")
 
     bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(blob_name)
-    blob.upload_from_file(file_object)
+    blob = bucket.blob(f"{prefix}{file_name}")  
+    blob.upload_from_filename(file_name)
+    return
 
 
-def list_files(bucket_name, prefix):
-    """Lists all the blobs with the specified prefix in the bucket."""
-
-    blobs = storage_client.list_blobs(bucket_name, prefix=prefix)
-    print(blobs)
-    list = [blob.name.replace(prefix, "", 1)  for blob in blobs]
-    print(list,"success")
-    return list
-
-
-
-def download_blob(bucket_name, source_blob_name):
-    """Downloads a blob from the bucket and returns the content as bytes."""
-    try:
-        storage_client = storage.Client()
-        bucket = storage_client.bucket(bucket_name)
-        blob = bucket.blob(source_blob_name)
-        file_bytes = blob.download_as_bytes()  # Download as bytes
-        print(f"Downloaded {len(file_bytes)} bytes") # Log downloaded byte size
-        return BytesIO(file_bytes), blob.content_type  # Return BytesIO object
-
-    except Exception as e:
-        print(f"Error downloading blob {source_blob_name}: {e}")  # Print the full exception!
-        return None, None
-
+def download_file(bucket_name, file_name, prefix='images/'): 
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(f"{prefix}{file_name}")
+    blob.download_to_filename(file_name) 
+    blob.reload() 
