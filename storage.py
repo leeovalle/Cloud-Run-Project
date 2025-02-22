@@ -28,4 +28,4 @@ def download_file(bucket_name, file_name, prefix='images/'):
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(f"{prefix}{file_name}")
     blob.download_to_filename(file_name) 
-    blob.reload() 
+    blob.reload()
