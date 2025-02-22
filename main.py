@@ -14,7 +14,7 @@ if api_key is None:
     raise ValueError("GOOGLE_API_KEY environment variable not set.")
 genai.configure(api_key=api_key)
 
-app = Flask(__name__)  # Use __name__ for clarity
+app = Flask(__name__) 
 BUCKET_NAME = os.getenv("BUCKET_NAME", "images_lee")
 IMAGES_PREFIX = "images/"
 
