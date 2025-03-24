@@ -65,7 +65,8 @@ def list_files(bucket_name):
 @app.route("/")
 def index():
     """Displays the main index page with an upload form and a list of files."""
-    index_html = """
+    index_html = """<body style="background-color: rgb(64,224,208);">
+<h1>Project 3: CI/CD</h1>
 <form method="post" enctype="multipart/form-data" action="/upload">
   <div>
     <label for="file">Choose file to upload</label>
