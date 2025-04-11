@@ -66,7 +66,7 @@ def list_files(bucket_name):
 def index():
     """Displays the main index page with an upload form and a list of files."""
     index_html = """ 
-<h1>Project 3</h1>
+<h1>Course Project</h1>
 <form method="post" enctype="multipart/form-data" action="/upload">
   <div>
     <label for="file">Choose file to upload</label>
