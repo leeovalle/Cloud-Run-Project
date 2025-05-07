@@ -80,14 +80,53 @@ def index():
         }
         h1 {
             color: #333;
+            text-align: center;
         }
-        .upload-form {
-            margin-bottom: 30px;
+        .card {
+            background: white;
+            padding: 20px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin: 40px auto;
+            max-width: 500px;
+        }
+        .upload-form h2 {
+            margin-top: 0;
+            font-size: 1.2em;
+            color: #555;
+        }
+        .upload-form form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .upload-form input[type="file"] {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 6px;
+            background: #f9f9f9;
+        }
+        .upload-form button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .upload-form button:hover {
+            background-color: #0056b3;
         }
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 20px;
+        }
+        .grid a {
+            display: block;
+            text-decoration: none;
         }
         .grid img {
             width: 100%;
@@ -104,11 +143,13 @@ def index():
 </head>
 <body>
     <h1>📸 Image Captioning Gallery</h1>
-    <form method="post" enctype="multipart/form-data" action="/upload" class="upload-form">
-        <label for="file">Choose an image to upload:</label>
-        <input type="file" id="file" name="form_file" accept="image/jpeg"/>
-        <button type="submit">Upload</button>
-    </form>
+    <div class="card upload-form">
+        <h2>Upload an Image</h2>
+        <form method="post" enctype="multipart/form-data" action="/upload">
+            <input type="file" id="file" name="form_file" accept="image/jpeg" required />
+            <button type="submit">Upload</button>
+        </form>
+    </div>
     <div class="grid">
     """
 
@@ -124,7 +165,7 @@ def index():
 </body>
 </html>
     """
-    return index_html
+    return index_html 
 
 
 @app.route("/upload", methods=["POST"])
