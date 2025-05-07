@@ -64,23 +64,66 @@ def list_files(bucket_name):
 # --- Route Handlers ---
 @app.route("/")
 def index():
-    """Displays the main index page with an upload form and a list of files."""
-    index_html = """ 
-<h1>Course Project</h1>
-<form method="post" enctype="multipart/form-data" action="/upload">
-  <div>
-    <label for="file">Choose file to upload</label>
-    <input type="file" id="file" name="form_file" accept="image/jpeg"/>
-  </div>
-  <div>
-    <button>Submit</button>
-  </div>
-</form>
-<ul>
+    """Displays the main index page with an upload form and a grid of image thumbnails."""
+    image_files = list_files(BUCKET_NAME)
+
+    index_html = """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f8f8f8;
+        }
+        h1 {
+            color: #333;
+        }
+        .upload-form {
+            margin-bottom: 30px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .grid img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+        .grid img:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <h1>📸 Image Captioning Gallery</h1>
+    <form method="post" enctype="multipart/form-data" action="/upload" class="upload-form">
+        <label for="file">Choose an image to upload:</label>
+        <input type="file" id="file" name="form_file" accept="image/jpeg"/>
+        <button type="submit">Upload</button>
+    </form>
+    <div class="grid">
     """
-    for file in list_files(BUCKET_NAME):
-        index_html += f'<li><a href="/files/{file}">{file}</a></li>'
-    index_html += "</ul>"
+
+    for file in image_files:
+        index_html += f'''
+        <a href="/files/{file}">
+            <img src="/image/{file}" alt="{file}">
+        </a>
+        '''
+
+    index_html += """
+    </div>
+</body>
+</html>
+    """
     return index_html
 
 
