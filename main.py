@@ -231,10 +231,66 @@ def get_file(filename):
         title = "Error: Could not process image description"
         description = "An error occurred while trying to get the description."
 
-    image_html = f"<h2>{title}</h2>"
-    image_html += f'<img src="/image/{filename}" width="500" height="333"><br>{filename}'
-    image_html += f"<p>{description}</p>"
-    image_html += '<p><a href="/">Back</a></p>'
+    image_html = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{title}</title>
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            padding: 40px;
+        }}
+        .card {{
+            background-color: white;
+            max-width: 600px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }}
+        .card h2 {{
+            margin-top: 0;
+            color: #333;
+        }}
+        .card img {{
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 20px 0;
+        }}
+        .card p {{
+            color: #555;
+            font-size: 1rem;
+            line-height: 1.5;
+        }}
+        .back-link {{
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+        }}
+        .back-link:hover {{
+            background-color: #0056b3;
+        }}
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>{title}</h2>
+        <img src="/image/{filename}" alt="{title}">
+        <p>{description}</p>
+        <a class="back-link" href="/">← Back to Gallery</a>
+    </div>
+</body>
+</html>
+    """
     return image_html
 
 
