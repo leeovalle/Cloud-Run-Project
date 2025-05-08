@@ -27,7 +27,11 @@ generation_config = {
 }
 
 model = genai.GenerativeModel(model_name="gemini-1.5-flash")
-PROMPT = "give the image a title and briefly describe the image. end your response in json"
+PROMPT = """
+Generate a JSON object with two keys: 'title' (a string providing a concise title for the image)
+ and 'description' (a string briefly describing the image). The entire response must be only this
+  JSON object, with no other text or markdown, make it funny and creative.
+  """
 
 
 # --- Utility Functions ---
@@ -40,17 +44,19 @@ def upload_to_gemini(path, mime_type=None):
 
 def extract_json_from_response(response_text):
     """
-    Extracts a JSON code block from a response that may contain extra text.
-    It looks for a block starting with "json" and ending with "".
+    Extracts a JSON object from a response that might be wrapped in markdown
+    code fences (e.g., ```json ... ```).
     """
-    start_token = "json"
-    end_token = ""
-    start = response_text.find(start_token)
-    if start != -1:
-        start += len(start_token)
-        end = response_text.find(end_token, start)
-        if end != -1:
-            return response_text[start:end].strip()
+    # Check if the response is wrapped in markdown JSON fences
+    if response_text.strip().startswith("```json"):
+        # Remove the opening fence (```json)
+        cleaned_text = response_text.strip()[len("```json"):]
+        # Remove the closing fence (```)
+        if cleaned_text.endswith("```"):
+            cleaned_text = cleaned_text[:-len("```")]
+        return cleaned_text.strip()
+    # If not wrapped in markdown, assume it's plain JSON or needs other handling
+    # For now, we'll just strip it, but you might add more sophisticated checks
     return response_text.strip()
 
 
